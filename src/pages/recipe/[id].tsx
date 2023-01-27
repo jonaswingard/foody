@@ -20,7 +20,7 @@ const Recipe = () => {
     <Base>
       <>
         <header className="mt-5 mb-8 p-3 rounded-lg shadow-md bg-white">
-          <div className="flex items-center mb-5">
+          <div className="flex items-center mb-4">
             <h2 className="text-center flex-1 text-2xl">{name}</h2>
             <button onClick={() => setIsEditing(!isEditing)}>
               {isEditing ? "✅" : "🛠️"}
