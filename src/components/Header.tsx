@@ -7,9 +7,9 @@ const Header: FC = () => {
   const { data: session } = useSession();
 
   return (
-    <header className="p-6 flex justify-between text-white bg-slate-800">
+    <header className="p-6 flex justify-between items-center text-white bg-slate-800">
       <Link href="/">
-        <span className="logo">🍕🍔🌮</span>
+        <h1 className="logo text-3xl">Foody 🍕🍔🌮</h1>
       </Link>
       {session && (
         <div className="flex items-center">
