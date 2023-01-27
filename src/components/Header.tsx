@@ -9,7 +9,7 @@ const Header: FC = () => {
   return (
     <header className="p-6 flex justify-between items-center text-white bg-slate-800">
       <Link href="/">
-        <h1 className="logo text-3xl">Foody 🍕🍔🌮</h1>
+        <h1 className="logo text-3xl">Foody v0.1 🍕🍔🌮</h1>
       </Link>
       {session && (
         <div className="flex items-center">
