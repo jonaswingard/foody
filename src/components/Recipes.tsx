@@ -1,15 +1,38 @@
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
-
 import data from "../data/data";
 
+interface IRecipeFields {
+  Servings: number;
+  Difficulty: string;
+  Name: string;
+  brought: boolean;
+}
+
+interface IRecipeRecord {
+  id: string;
+  fields: IRecipeFields;
+}
+
+const Loader = () => <div className="p-10 text-center text-7xl">⏳</div>;
+
 const Recipes: FC = () => {
-  const [realData, setData] = useState([]);
+  // TODO: lägga till laddning
+  const [recipeRecords, setRecipeRecords] = useState<IRecipeRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/airtable").then((res) => {
-      console.log(res.json().then((data) => setData(data)));
-    });
+    (async () => {
+      try {
+        const response = await fetch("/api/airtable");
+        const data = await response.json();
+        setRecipeRecords(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, []);
 
   return (
@@ -18,16 +41,17 @@ const Recipes: FC = () => {
       <Link className="block underline underline-offset-2 mb-4" href="/types">
         Visa recept efter typ
       </Link>
+      {isLoading && <Loader />}
       <ul>
-        {realData
-          //  .sort((a, b) => {
-          //    if (a.name > b.name) {
-          //      return 1;
-          //    } else if (a.name < b.name) {
-          //      return -1;
-          //    }
-          //    return 0;
-          //  })
+        {recipeRecords
+          .sort((a, b) => {
+            if (a.fields.Name > b.fields.Name) {
+              return 1;
+            } else if (a.fields.Name < b.fields.Name) {
+              return -1;
+            }
+            return 0;
+          })
           .map(({ id, fields }: { id: string; fields: any }) => (
             <li key={id}>
               <Link
