@@ -2,8 +2,6 @@ import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import { NextApiRequest, NextApiResponse } from "next";
 
-console.log("que");
-
 if (
   !process.env.GITHUB_ID ||
   !process.env.GITHUB_SECRET ||
