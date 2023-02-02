@@ -20,8 +20,10 @@ export interface IIngredientMapping {
   ingredientName: string;
 }
 
+export type TAsyncState = "idle" | "pending" | "fulfilled" | "rejected";
+
 export interface IBaseState {
-  fetchState: "idle" | "pending" | "fulfilled";
+  fetchState: TAsyncState;
 }
 
 export interface IRecipeRecord {

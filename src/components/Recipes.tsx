@@ -2,11 +2,14 @@ import { FC, useEffect } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addRecipe,
   allRecipes,
   fetchRecipes,
   selectFetchState,
+  selectPostState,
 } from "@/store/recipesSlice";
 import { AppDispatch } from "@/store/store";
+import { IRecipeFields } from "@/interfaces";
 
 const Loader = () => <div className="p-10 text-center text-7xl">⏳</div>;
 
@@ -14,10 +17,7 @@ const Recipes: FC = () => {
   const recipeRecords = useSelector(allRecipes);
   const dispatch = useDispatch<AppDispatch>();
   const fetchState = useSelector(selectFetchState);
-
-  useEffect(() => {
-    console.log(recipeRecords);
-  }, [recipeRecords]);
+  const postState = useSelector(selectPostState);
 
   useEffect(() => {
     if (fetchState === "idle") {
@@ -32,11 +32,28 @@ const Recipes: FC = () => {
         Visa recept efter typ
       </Link>
 
+      <button
+        className="mb-4 p-2 rounded-lg shadow-md bg-slate-500 text-white"
+        onClick={() => {
+          const postData = {
+            Difficulty: "Enkel",
+            Name: "My Recipe Name 16",
+            Servings: 4,
+            TotalTime: "60 min",
+          } as IRecipeFields;
+
+          dispatch(addRecipe(postData));
+        }}
+      >
+        {postState === "pending" ? "Laddar..." : "Skapa nytt recept"}
+      </button>
+
       {fetchState !== "fulfilled" ? (
         <Loader />
       ) : (
         <ul>
           {recipeRecords
+            .filter((recipe) => !!recipe?.id)
             .sort((a, b) => {
               if (a.fields.Name > b.fields.Name) {
                 return 1;
