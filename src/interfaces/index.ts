@@ -19,3 +19,41 @@ export interface IIngredientMapping {
   directionIndex: number;
   ingredientName: string;
 }
+
+export interface IBaseState {
+  fetchState: "idle" | "pending" | "fulfilled";
+}
+
+export interface IRecipeRecord {
+  id: string;
+  fields: IRecipeFields;
+}
+
+export interface IAirtableRecord<T> {
+  id: string;
+  fields: T;
+}
+
+export interface IRecipeFields {
+  Servings: number;
+  Difficulty: string;
+  Name: string;
+  brought: boolean;
+  Ingredients: string[];
+  Directions: string[];
+  TotalTime: string;
+}
+
+export interface IDirectionFields {
+  Direction: string;
+  SortOrder: number;
+  brought: boolean;
+}
+
+export interface IIngredientFields {
+  Recipes: string;
+  Name: string;
+  SelectName: string;
+  Quantity: string;
+  brought: boolean;
+}

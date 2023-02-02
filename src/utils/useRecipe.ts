@@ -1,16 +1,5 @@
+import { IRecipeRecord } from "@/interfaces";
 import useSWR from "swr";
-
-interface IRecipeFields {
-  Servings: number;
-  Difficulty: string;
-  Name: string;
-  brought: boolean;
-}
-
-interface IRecipeRecord {
-  id: string;
-  fields: IRecipeFields;
-}
 
 const fetcher = (url: URL) => fetch(url).then((res) => res.json());
 

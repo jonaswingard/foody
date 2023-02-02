@@ -1,33 +1,15 @@
+import { selectAllDirections } from "@/store/directionsSlice";
 import { FC, useState } from "react";
-import { IIngredient } from "../interfaces";
-
-const Selector: FC<{ onClick: () => void; ingredients?: IIngredient[] }> = ({
-  onClick,
-  ingredients,
-}) => {
-  return (
-    <ul>
-      {ingredients?.map((item) => (
-        <li key={item.name}>
-          <button
-            className="py-2 px-5 hover:bg-blue-200 w-40 text-left"
-            onClick={onClick}
-          >
-            {item.name}
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
-};
+import { useSelector } from "react-redux";
+import { IDirectionFields, IIngredient } from "../interfaces";
 
 const Directions: FC<{
-  directions?: string[];
-  ingredients?: IIngredient[];
+  directionIds?: string[];
   isEditing: boolean;
-}> = ({ directions = [], ingredients, isEditing }) => {
+}> = ({ directionIds, isEditing }) => {
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ left: 0, top: 0 });
+  const allDirections = useSelector(selectAllDirections);
 
   return (
     <>
@@ -36,14 +18,33 @@ const Directions: FC<{
           className="fixed bg-white border mt-5"
           style={{ left: position.left, top: position.top }}
         >
-          <Selector
+          {/* <Selector
             onClick={() => setVisible(false)}
             ingredients={ingredients}
-          />
+          /> */}
         </div>
       )}
       <ol className="">
-        {directions?.map((direction) => (
+        {directionIds
+          ?.map(
+            (directionId) =>
+              allDirections.find((d) => d.id === directionId)
+                ?.fields as IDirectionFields
+          )
+          .sort((a, b) => a.SortOrder - b.SortOrder)
+          .map((direction, index) => (
+            <li className="mb-4 p-3 rounded-lg shadow-md bg-white" key={index}>
+              <label className="flex gap-2">
+                {!isEditing && (
+                  <input type="checkbox" className="peer hidden" />
+                )}
+                <div className="peer-checked:text-gray-300">
+                  {direction?.Direction}
+                </div>
+              </label>
+            </li>
+          ))}
+        {/* {directions?.map((direction) => (
           <li
             className="mb-4 p-3 rounded-lg shadow-md bg-white"
             key={direction}
@@ -82,7 +83,7 @@ const Directions: FC<{
               </label>
             </div>
           </li>
-        ))}
+        ))} */}
       </ol>
     </>
   );

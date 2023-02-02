@@ -1,11 +1,30 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Link from "next/link";
-import { useRecipes } from "@/utils/useRecipe";
+import { IRecipeRecord, useRecipes } from "@/utils/useRecipe";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  allRecipes,
+  fetchRecipes,
+  selectFetchState,
+} from "@/store/recipesSlice";
+import { AppDispatch } from "@/store/store";
 
 const Loader = () => <div className="p-10 text-center text-7xl">⏳</div>;
 
 const Recipes: FC = () => {
-  const { recipeRecords, isLoading } = useRecipes();
+  const recipeRecords = useSelector(allRecipes);
+  const dispatch = useDispatch<AppDispatch>();
+  const fetchState = useSelector(selectFetchState);
+
+  useEffect(() => {
+    console.log(recipeRecords);
+  }, [recipeRecords]);
+
+  useEffect(() => {
+    if (fetchState === "idle") {
+      dispatch(fetchRecipes());
+    }
+  }, [dispatch, fetchState]);
 
   return (
     <div className="bg-white p-5 shadow">
@@ -13,7 +32,8 @@ const Recipes: FC = () => {
       <Link className="block underline underline-offset-2 mb-4" href="/types">
         Visa recept efter typ
       </Link>
-      {isLoading ? (
+
+      {fetchState !== "fulfilled" ? (
         <Loader />
       ) : (
         <ul>
@@ -30,7 +50,10 @@ const Recipes: FC = () => {
               <li key={id}>
                 <Link
                   className="underline underline-offset-2"
-                  href={`/recipe/${id}`}
+                  href={{
+                    pathname: "/recipe/[id]",
+                    query: { id },
+                  }}
                 >
                   {fields.Name}
                 </Link>
