@@ -1,6 +1,5 @@
 import { FC, useEffect } from "react";
 import Link from "next/link";
-import { IRecipeRecord, useRecipes } from "@/utils/useRecipe";
 import { useDispatch, useSelector } from "react-redux";
 import {
   allRecipes,
