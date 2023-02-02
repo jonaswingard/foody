@@ -3,10 +3,9 @@ import Airtable, { FieldSet, Records } from "airtable";
 if (
   !process.env.AIRTABLE_API_KEY ||
   !process.env.AIRTABLE_BASE_ID ||
-  !process.env.AIRTABLE_TABLE_NAME
 ) {
   throw new Error(
-    "AIRTABLE_API_KEY, AIRTABLE_BASE_ID and AIRTABLE_TABLE_NAME must be set"
+    "AIRTABLE_API_KEY and AIRTABLE_BASE_ID must be set"
   );
 }
 
