@@ -1,12 +1,7 @@
 import Airtable, { FieldSet, Records } from "airtable";
 
-if (
-  !process.env.AIRTABLE_API_KEY ||
-  !process.env.AIRTABLE_BASE_ID ||
-) {
-  throw new Error(
-    "AIRTABLE_API_KEY and AIRTABLE_BASE_ID must be set"
-  );
+if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
+  throw new Error("AIRTABLE_API_KEY and AIRTABLE_BASE_ID must be set");
 }
 
 Airtable.configure({ apiKey: process.env.AIRTABLE_API_KEY });
