@@ -8,7 +8,7 @@ const Base = ({ children }: { children: ReactNode }) => {
   const loading = status === "loading";
 
   return (
-    <div className="bg-slate-200 h-screen">
+    <div className="bg-slate-200 min-h-screen">
       <Head>
         <title>Foody</title>
         <meta name="description" content="Food is good" />

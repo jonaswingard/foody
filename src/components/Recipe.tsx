@@ -9,8 +9,11 @@ import {
   selectFetchState as selectIngredientFetchState,
 } from "@/store/ingredientSlice";
 import {
+  deleteRecipe,
   fetchRecipes,
   recipeSelectors,
+  resetDeleteState,
+  selectDeleteState,
   selectFetchState as selectRecipeFetchState,
 } from "@/store/recipesSlice";
 import { AppDispatch, AppState } from "@/store/store";
@@ -24,6 +27,7 @@ const Recipe = () => {
   const recipeId = router.query.id;
   const dispatch = useDispatch<AppDispatch>();
   const recipeFetchState = useSelector(selectRecipeFetchState);
+  const recipeDeleteState = useSelector(selectDeleteState);
   const ingredientsFetchState = useSelector(selectIngredientFetchState);
   const directionsFetchState = useSelector(selectDirectionFetchState);
   const [isEditing, setIsEditing] = useState(false);
@@ -45,6 +49,13 @@ const Recipe = () => {
       dispatch(fetchDirections());
     }
   }, [dispatch, directionsFetchState]);
+
+  useEffect(() => {
+    if (recipeDeleteState === "fulfilled") {
+      dispatch(resetDeleteState());
+      router.push("/");
+    }
+  }, [dispatch, recipeDeleteState, router]);
 
   const recipe = useSelector((state: AppState) =>
     recipeSelectors.selectById(state, recipeId as string)
@@ -70,6 +81,18 @@ const Recipe = () => {
       <header className="mt-5 mb-8 p-3 rounded-lg shadow-md bg-white">
         <div className="flex items-center mb-4">
           <h2 className="text-center flex-1 text-2xl">{Name}</h2>
+
+          <button
+            className="mr-2"
+            onClick={() => {
+              if (confirm("Är du säker på att du vill ta bort receptet?")) {
+                dispatch(deleteRecipe(recipe.id));
+              }
+            }}
+          >
+            {"❌"}
+          </button>
+
           <button onClick={() => setIsEditing(!isEditing)}>
             {isEditing ? "✅" : "🛠️"}
           </button>
