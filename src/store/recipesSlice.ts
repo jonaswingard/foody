@@ -14,8 +14,7 @@ import {
 import build from "next/dist/build";
 
 export interface IRecipeState extends IBaseState {
-  postState: TAsyncState;
-  deleteState: TAsyncState;
+  submitState: TAsyncState;
 }
 
 export const fetchRecipes = createAsyncThunk(
@@ -36,6 +35,25 @@ export const addRecipe = createAsyncThunk(
     try {
       const data = await fetch("/api/airtable/recipe", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": "token-value",
+        },
+        body: JSON.stringify(recipe),
+      });
+      return (await data.json()) as IAirtableRecord<IRecipeFields>[];
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const updateRecipe = createAsyncThunk(
+  "recipes/updateRecipe",
+  async (recipe: IRecipeRecord) => {
+    try {
+      const data = await fetch("/api/airtable/recipe", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "x-access-token": "token-value",
@@ -72,8 +90,7 @@ const recipesAdapter = createEntityAdapter<IAirtableRecord<IRecipeFields>>();
 
 const initialState: IRecipeState = {
   fetchState: "idle",
-  postState: "idle",
-  deleteState: "idle",
+  submitState: "idle",
 };
 
 export const recipesSlice = createSlice({
@@ -83,8 +100,8 @@ export const recipesSlice = createSlice({
     recipiesReceived(state, action) {
       recipesAdapter.setAll(state, action.payload);
     },
-    resetDeleteState(state) {
-      state.deleteState = "idle";
+    resetSubmitState(state) {
+      state.submitState = "idle";
     },
   },
   extraReducers: (builder) => {
@@ -103,29 +120,42 @@ export const recipesSlice = createSlice({
     });
 
     builder.addCase(addRecipe.pending, (state) => {
-      state.postState = "pending";
+      state.submitState = "pending";
     });
     builder.addCase(addRecipe.fulfilled, (state, action) => {
       if (action.payload) {
         recipesAdapter.addMany(state, action.payload);
       }
-      state.postState = "fulfilled";
+      state.submitState = "fulfilled";
     });
     builder.addCase(addRecipe.rejected, (state) => {
-      state.postState = "rejected";
+      state.submitState = "rejected";
+    });
+
+    builder.addCase(updateRecipe.pending, (state) => {
+      state.submitState = "pending";
+    });
+    builder.addCase(updateRecipe.fulfilled, (state, action) => {
+      if (action.payload) {
+        recipesAdapter.upsertMany(state, action.payload);
+      }
+      state.submitState = "fulfilled";
+    });
+    builder.addCase(updateRecipe.rejected, (state) => {
+      state.submitState = "rejected";
     });
 
     builder.addCase(deleteRecipe.pending, (state) => {
-      state.deleteState = "pending";
+      state.submitState = "pending";
     });
     builder.addCase(deleteRecipe.fulfilled, (state, action) => {
       if (action.payload?.id) {
         recipesAdapter.removeOne(state, action.payload.id);
       }
-      state.deleteState = "fulfilled";
+      state.submitState = "fulfilled";
     });
     builder.addCase(deleteRecipe.rejected, (state) => {
-      state.deleteState = "rejected";
+      state.submitState = "rejected";
     });
   },
 });
@@ -134,11 +164,10 @@ export const recipeSelectors = recipesAdapter.getSelectors<AppState>(
   (state) => state.recipes
 );
 export const selectFetchState = (state: AppState) => state.recipes.fetchState;
-export const selectPostState = (state: AppState) => state.recipes.postState;
-export const selectDeleteState = (state: AppState) => state.recipes.deleteState;
+export const selectSubmitState = (state: AppState) => state.recipes.submitState;
 export const allRecipes = recipeSelectors.selectAll;
 export const selectRecipeById = recipeSelectors.selectById;
 
-export const { resetDeleteState } = recipesSlice.actions;
+export const { resetSubmitState } = recipesSlice.actions;
 
 export default recipesSlice.reducer;

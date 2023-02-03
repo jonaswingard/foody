@@ -17,9 +17,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
       );
     });
+  } else if (req.method === "PUT") {
+    await new Promise(() => {
+      recipesTable.update(
+        [req.body as { id: string; fields: FieldSet }],
+        function (err, records) {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: "Something went wrong! 😕" });
+          } else {
+            res.status(200).json(records);
+          }
+        }
+      );
+    });
   } else if (req.method === "DELETE") {
     await new Promise(() => {
-      recipesTable.destroy(req.body, function (err, deletedRecord) {
+      recipesTable.destroy(req.body as string, function (err, deletedRecord) {
         if (err) {
           console.error(err);
           res.status(500).json({ msg: "Something went wrong! 😕" });

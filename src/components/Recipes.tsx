@@ -6,7 +6,7 @@ import {
   allRecipes,
   fetchRecipes,
   selectFetchState,
-  selectPostState,
+  selectSubmitState,
 } from "@/store/recipesSlice";
 import { AppDispatch } from "@/store/store";
 import { IRecipeFields } from "@/interfaces";
@@ -17,7 +17,7 @@ const Recipes: FC = () => {
   const recipeRecords = useSelector(allRecipes);
   const dispatch = useDispatch<AppDispatch>();
   const fetchState = useSelector(selectFetchState);
-  const postState = useSelector(selectPostState);
+  const postState = useSelector(selectSubmitState);
 
   useEffect(() => {
     if (fetchState === "idle") {
@@ -28,25 +28,18 @@ const Recipes: FC = () => {
   return (
     <div className="bg-white p-5 shadow">
       <h2 className="py-5 text-2xl">Recept</h2>
-      <Link className="block underline underline-offset-2 mb-4" href="/types">
-        Visa recept efter typ
-      </Link>
-
-      <button
-        className="mb-4 p-2 rounded-lg shadow-md bg-slate-500 text-white"
-        onClick={() => {
-          const postData = {
-            Difficulty: "Enkel",
-            Name: "My Recipe Name 16",
-            Servings: 4,
-            TotalTime: "60 min",
-          } as IRecipeFields;
-
-          dispatch(addRecipe(postData));
-        }}
-      >
-        {postState === "pending" ? "Laddar..." : "Skapa nytt recept"}
-      </button>
+      <nav className="flex">
+        <Link
+          className="block underline underline-offset-2 mb-4"
+          href="/recipe/edit"
+        >
+          Skapa nytt recept
+        </Link>
+        <span className="mx-5">|</span>
+        <Link className="block underline underline-offset-2 mb-4" href="/types">
+          Visa recept efter typ
+        </Link>
+      </nav>
 
       {fetchState !== "fulfilled" ? (
         <Loader />

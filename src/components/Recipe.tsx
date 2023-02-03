@@ -12,11 +12,12 @@ import {
   deleteRecipe,
   fetchRecipes,
   recipeSelectors,
-  resetDeleteState,
-  selectDeleteState,
+  resetSubmitState,
   selectFetchState as selectRecipeFetchState,
+  selectSubmitState,
 } from "@/store/recipesSlice";
 import { AppDispatch, AppState } from "@/store/store";
+import Link from "next/link";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -24,13 +25,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Recipe = () => {
   const router = useRouter();
-  const recipeId = router.query.id;
   const dispatch = useDispatch<AppDispatch>();
   const recipeFetchState = useSelector(selectRecipeFetchState);
-  const recipeDeleteState = useSelector(selectDeleteState);
+  const recipeSubmitState = useSelector(selectSubmitState);
   const ingredientsFetchState = useSelector(selectIngredientFetchState);
   const directionsFetchState = useSelector(selectDirectionFetchState);
   const [isEditing, setIsEditing] = useState(false);
+  const recipeId = router.query.id;
 
   useEffect(() => {
     if (recipeFetchState === "idle") {
@@ -51,11 +52,11 @@ const Recipe = () => {
   }, [dispatch, directionsFetchState]);
 
   useEffect(() => {
-    if (recipeDeleteState === "fulfilled") {
-      dispatch(resetDeleteState());
+    if (recipeSubmitState === "fulfilled") {
+      dispatch(resetSubmitState());
       router.push("/");
     }
-  }, [dispatch, recipeDeleteState, router]);
+  }, [dispatch, recipeSubmitState, router]);
 
   const recipe = useSelector((state: AppState) =>
     recipeSelectors.selectById(state, recipeId as string)
@@ -93,9 +94,11 @@ const Recipe = () => {
             {"❌"}
           </button>
 
-          <button onClick={() => setIsEditing(!isEditing)}>
+          <Link href={`/recipe/edit/${recipe.id}`}>🛠️</Link>
+
+          {/* <button onClick={() => setIsEditing(!isEditing)}>
             {isEditing ? "✅" : "🛠️"}
-          </button>
+          </button> */}
         </div>
         <div className="flex gap-3">
           <span>
