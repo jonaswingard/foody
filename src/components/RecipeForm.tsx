@@ -30,8 +30,6 @@ const RecipeForm: FC = () => {
     recipeSelectors.selectById(state, recipeId as string)
   );
 
-  console.log(recipe);
-
   useEffect(() => {
     if (submitState === "fulfilled") {
       dispatch(resetSubmitState());
@@ -48,12 +46,9 @@ const RecipeForm: FC = () => {
           onSubmit={(e) => {
             e.preventDefault();
 
-            const formData = Array.from(
-              new FormData(e.target as HTMLFormElement)
-            );
             const postData = Object.assign(
               {},
-              ...formData
+              ...Array.from(new FormData(e.target as HTMLFormElement))
                 .filter(([key, value]) => value)
                 .map(([key, value]) => ({ [key]: value }))
                 .map((x) => {

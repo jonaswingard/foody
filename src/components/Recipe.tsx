@@ -6,6 +6,8 @@ import {
 } from "@/store/directionsSlice";
 import {
   fetchIngredients,
+  selectAllIngredients,
+  selectByRecipeId,
   selectFetchState as selectIngredientFetchState,
 } from "@/store/ingredientSlice";
 import {
@@ -32,6 +34,9 @@ const Recipe = () => {
   const directionsFetchState = useSelector(selectDirectionFetchState);
   const [isEditing, setIsEditing] = useState(false);
   const recipeId = router.query.id;
+  const ingredients = useSelector((state) =>
+    selectByRecipeId(state as AppState, recipeId as string)
+  );
 
   useEffect(() => {
     if (recipeFetchState === "idle") {
@@ -70,7 +75,6 @@ const Recipe = () => {
     Name,
     Difficulty,
     Servings,
-    Ingredients: ingredients,
     Directions: directionIds,
     TotalTime,
   } = recipe.fields;
@@ -114,9 +118,9 @@ const Recipe = () => {
       </header>
 
       <section className="flex gap-5 flex-wrap md:flex-nowrap">
-        <aside className="">
+        <aside>
           <h3>Ingredienser</h3>
-          <Ingredients ingredientIds={ingredients} />
+          <Ingredients ingredients={ingredients} />
         </aside>
         <section>
           <h3>Beskrivning</h3>

@@ -1,22 +1,25 @@
 import { IAirtableRecord, IIngredientFields } from "@/interfaces";
-import { selectAllIngredients } from "@/store/ingredientSlice";
-import { FC } from "react";
-import { useSelector } from "react-redux";
+import {
+  selectSelectedIngredient,
+  setSelectedIngredientId,
+} from "@/store/ingredientSlice";
+import { FC, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import EditRecipe from "./IngredientForm";
 
-const Ingredients: FC<{ ingredientIds?: string[] }> = ({ ingredientIds }) => {
-  const allIngredients = useSelector(selectAllIngredients);
+const Ingredients: FC<{
+  ingredients: IAirtableRecord<IIngredientFields>[];
+}> = ({ ingredients }) => {
+  const dispatch = useDispatch();
+  const selectedIngredient = useSelector(selectSelectedIngredient);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
 
-  return ingredientIds?.length ? (
+  return ingredients?.length ? (
     <div className="p-3 rounded-lg shadow-md bg-white">
       <table className="w-64">
         <tbody>
-          {ingredientIds
-            .map(
-              (ingredientId) =>
-                allIngredients.find(
-                  (ing) => ing.id === ingredientId
-                ) as IAirtableRecord<IIngredientFields>
-            )
+          {ingredients
             .sort((a, b) => {
               if (a.fields.Name > b.fields.Name) {
                 return 1;
@@ -28,14 +31,50 @@ const Ingredients: FC<{ ingredientIds?: string[] }> = ({ ingredientIds }) => {
 
               return 0;
             })
-            ?.map((ingredient, index) => (
-              <tr key={index}>
-                <td>{ingredient?.fields.Name}</td>
-                <td>{ingredient?.fields.Quantity}</td>
+            .map((ingredient) => (
+              <tr key={ingredient.id}>
+                {isEdit && ingredient.id === selectedIngredient?.id ? (
+                  <td colSpan={2}>
+                    <EditRecipe />
+                  </td>
+                ) : (
+                  <>
+                    <td>
+                      <button
+                        onClick={() => {
+                          // dispatch(setSelectedIngredientId(null));
+                          // setTimeout(() => {
+                          // }, 100);
+
+                          dispatch(setSelectedIngredientId(ingredient.id));
+                          setIsEdit(true);
+                        }}
+                      >
+                        {ingredient?.fields.Name}
+                      </button>
+                    </td>
+                    <td>{ingredient?.fields.Quantity}</td>
+                  </>
+                )}
               </tr>
             ))}
         </tbody>
       </table>
+      {isAdd && (
+        <section>
+          <div className="text-right">
+            <button
+              className="bg-slate-300 rounded-full w-7 h-7"
+              onClick={() => setIsAdd(true)}
+            >
+              ＋
+            </button>
+          </div>
+
+          <h3>Lägg till ingrediens</h3>
+          <EditRecipe />
+        </section>
+      )}
     </div>
   ) : null;
 };

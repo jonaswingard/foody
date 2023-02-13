@@ -53,9 +53,8 @@ export interface IDirectionFields {
 }
 
 export interface IIngredientFields {
-  Recipes: string;
+  Recipes: string[];
   Name: string;
-  SelectName: string;
   Quantity: string;
   brought: boolean;
 }
