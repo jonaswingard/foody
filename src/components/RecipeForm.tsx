@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "@/store/store";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const RecipeForm: FC = () => {
   const router = useRouter();
@@ -146,6 +147,7 @@ const RecipeForm: FC = () => {
             >
               {submitState === "pending" ? "Sparar..." : "Spara recept"}
             </button>
+            <Link href={`/recipe/${recipeId}`}>Avbryt</Link>
           </div>
         </form>
       </div>

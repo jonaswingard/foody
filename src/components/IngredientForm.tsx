@@ -10,46 +10,35 @@ import {
 } from "@/store/ingredientSlice";
 import { AppDispatch } from "@/store/store";
 import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const Input: FC<{ value: string }> = ({ value }) => {
-  return (
-    <label className="block text-sm mb-2">
-      <input
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight placeholder-gray-500 placeholder:italic"
-        name="Foo"
-        placeholder="Foo"
-        defaultValue={value}
-      />
-    </label>
-  );
-};
-
-const EditRecipe: FC = () => {
+const EditRecipe: FC<{ onCancel?: () => void; isAdding?: boolean }> = ({
+  onCancel,
+  isAdding,
+}) => {
   const router = useRouter();
   const recipeId = router.query.id;
   const dispatch = useDispatch<AppDispatch>();
   const submitState = useSelector(selectSubmitState);
-
   const selectedIngredient = useSelector(selectSelectedIngredient);
 
-  // useEffect(() => {
-  //   if (submitState === "idle") {
-  //     setIsEdit(!!selectedIngredient);
-  //   }
-  // }, [submitState, selectedIngredient]);
-
   useEffect(() => {
-    if (submitState === "fulfilled") {
-      dispatch(resetSubmitState());
-      dispatch(setSelectedIngredientId(null));
+    if (isAdding && submitState === "fulfilled") {
+      console.log("should clear now");
+      if (nameRef.current && quantityRef.current) {
+        quantityRef.current.value = "";
+        nameRef.current.value = "";
+        nameRef.current.focus();
+      }
     }
-  }, [dispatch, submitState]);
+  }, [isAdding, submitState]);
+
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const quantityRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div>
-      {/* {isEdit ? ( */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -75,14 +64,17 @@ const EditRecipe: FC = () => {
           }
         }}
       >
-        <div className="flex mt-5 gap-2">
+        <div className="flex mt-2 gap-2">
           <div className="mb-4">
             <label className="block text-sm mb-2">
               <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight placeholder-gray-500 placeholder:italic"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight placeholder-gray-500 placeholder:italic disabled:text-gray-300"
                 name="Name"
                 placeholder="Namn"
+                autoFocus
                 defaultValue={selectedIngredient?.fields.Name}
+                ref={nameRef}
+                disabled={submitState === "pending"}
               />
             </label>
           </div>
@@ -90,36 +82,45 @@ const EditRecipe: FC = () => {
           <div className="mb-4">
             <label className="block text-sm mb-2">
               <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight placeholder-gray-500 placeholder:italic"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight placeholder-gray-500 placeholder:italic disabled:text-gray-300"
                 name="Quantity"
                 placeholder="Mängd"
                 defaultValue={selectedIngredient?.fields.Quantity}
+                disabled={submitState === "pending"}
+                ref={quantityRef}
               />
             </label>
           </div>
         </div>
-        <button className="bg-slate-400 border rounded py-2 px-3 mr-2">
-          Spara
+        <button
+          className="bg-slate-400 border rounded py-2 px-3 mr-2 disabled:opacity-25"
+          disabled={submitState === "pending"}
+        >
+          {submitState === "pending" ? "Sparar..." : "Spara"}
         </button>
         <button
-          className="border rounded py-2 px-3"
+          className="border rounded py-2 px-3 disabled:opacity-25"
+          disabled={submitState === "pending"}
           onClick={() => {
             dispatch(setSelectedIngredientId(null));
+            onCancel?.();
           }}
         >
           Avbryt
         </button>
-        <button
-          className="bg-slate-400 border rounded py-2 px-3 mr-2"
-          onClick={(e) => {
-            e.preventDefault();
-            if (confirm("Är du säker?")) {
-              dispatch(deleteIngredient(selectedIngredient?.id as string));
-            }
-          }}
-        >
-          Ta bort
-        </button>
+        {selectedIngredient && (
+          <button
+            className="bg-slate-400 border rounded py-2 px-3 mr-2"
+            onClick={(e) => {
+              e.preventDefault();
+              if (confirm("Är du säker?")) {
+                dispatch(deleteIngredient(selectedIngredient?.id as string));
+              }
+            }}
+          >
+            Ta bort
+          </button>
+        )}
       </form>
     </div>
   );

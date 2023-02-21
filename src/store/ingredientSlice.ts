@@ -79,6 +79,7 @@ export const deleteIngredient = createAsyncThunk(
         },
         body: JSON.stringify(ingredientId),
       });
+
       return (await data.json()) as IAirtableRecord<IIngredientFields>;
     } catch (error) {
       console.error(error);
@@ -123,6 +124,7 @@ export const ingredientsSlice = createSlice({
     builder.addCase(addIngredient.fulfilled, (state, action) => {
       if (action.payload) {
         ingredientsAdapter.addMany(state, action.payload);
+        state.selectedId = action.payload[0].id;
       }
 
       state.submitState = "fulfilled";
