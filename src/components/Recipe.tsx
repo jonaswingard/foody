@@ -122,7 +122,7 @@ const Recipe = () => {
           <h3>Ingredienser</h3>
           <Ingredients ingredients={ingredients} />
         </aside>
-        <section>
+        <section className="w-full">
           <h3>Beskrivning</h3>
           {directionIds && (
             <Directions

@@ -62,9 +62,6 @@ const Ingredients: FC<{
                       <td>
                         <button
                           onClick={() => {
-                            // dispatch(setSelectedIngredientId(null));
-                            // setTimeout(() => {
-                            // }, 100);
                             console.log("clicked", ingredient.id);
 
                             setIsEdit(true);
