@@ -33,3 +33,11 @@ export const addIngredientsToDirection = (
     })
     .join(" ");
 };
+
+export const getFormData = (form: HTMLFormElement) =>
+  Object.assign(
+    {},
+    ...Array.from(new FormData(form as HTMLFormElement))
+      .filter(([_key, value]) => value)
+      .map(([key, value]) => ({ [key]: value }))
+  );
