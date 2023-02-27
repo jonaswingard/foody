@@ -49,6 +49,7 @@ export interface IRecipeFields {
 export interface IDirectionFields {
   Direction: string;
   SortOrder: number;
+  Recipes: string[];
   brought: boolean;
 }
 

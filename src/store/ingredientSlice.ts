@@ -138,8 +138,6 @@ export const ingredientsSlice = createSlice({
     });
     builder.addCase(updateIngredient.fulfilled, (state, action) => {
       if (action.payload) {
-        console.log(action.payload);
-
         ingredientsAdapter.upsertMany(state, action.payload);
       }
 

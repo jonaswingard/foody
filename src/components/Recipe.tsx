@@ -3,11 +3,11 @@ import Ingredients from "@/components/Ingredients";
 import {
   fetchDirections,
   selectFetchState as selectDirectionFetchState,
+  selectByRecipeId as selectDirectionsByRecipeId,
 } from "@/store/directionsSlice";
 import {
   fetchIngredients,
-  selectAllIngredients,
-  selectByRecipeId,
+  selectByRecipeId as selectIngredientsByRecipeId,
   selectFetchState as selectIngredientFetchState,
 } from "@/store/ingredientSlice";
 import {
@@ -35,7 +35,11 @@ const Recipe = () => {
   const [isEditing, setIsEditing] = useState(false);
   const recipeId = router.query.id;
   const ingredients = useSelector((state) =>
-    selectByRecipeId(state as AppState, recipeId as string)
+    selectIngredientsByRecipeId(state as AppState, recipeId as string)
+  );
+
+  const directions = useSelector((state) =>
+    selectDirectionsByRecipeId(state as AppState, recipeId as string)
   );
 
   useEffect(() => {
@@ -78,8 +82,6 @@ const Recipe = () => {
     Directions: directionIds,
     TotalTime,
   } = recipe.fields;
-
-  // const mappings = directionMappings.find((d) => d.id === recipeId);
 
   return (
     <>
@@ -126,6 +128,7 @@ const Recipe = () => {
           <h3>Beskrivning</h3>
           {directionIds && (
             <Directions
+              directions={directions}
               // directions={directions.map(
               //   (direction, index) =>
               //     addIngredientsToDirection(
@@ -136,7 +139,6 @@ const Recipe = () => {
               //     ) || direction
               // )}
               // ingredients={ingredients}
-              directionIds={directionIds}
               isEditing={isEditing}
             />
           )}

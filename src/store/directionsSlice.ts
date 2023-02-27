@@ -1,4 +1,9 @@
-import { IAirtableRecord, IBaseState, IDirectionFields } from "@/interfaces";
+import {
+  IAirtableRecord,
+  IBaseState,
+  IDirectionFields,
+  TAsyncState,
+} from "@/interfaces";
 import {
   createAsyncThunk,
   createEntityAdapter,
@@ -6,7 +11,9 @@ import {
 } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 
-export interface IDirectionState extends IBaseState {}
+export interface IDirectionState extends IBaseState {
+  submitState: TAsyncState;
+}
 
 export const fetchDirections = createAsyncThunk(
   "directions/fetchDirections",
@@ -20,11 +27,70 @@ export const fetchDirections = createAsyncThunk(
   }
 );
 
+export const addDirection = createAsyncThunk(
+  "directions/add",
+  async (direction: IDirectionFields) => {
+    try {
+      const data = await fetch("/api/airtable/direction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": "token-value",
+        },
+        body: JSON.stringify(direction),
+      });
+      return (await data.json()) as IAirtableRecord<IDirectionFields>[];
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const updateDirection = createAsyncThunk(
+  "direction/update",
+  async (direction: IAirtableRecord<IDirectionFields>) => {
+    try {
+      const data = await fetch("/api/airtable/direction", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": "token-value",
+        },
+        body: JSON.stringify(direction),
+      });
+      return (await data.json()) as IAirtableRecord<IDirectionFields>[];
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const deleteDirection = createAsyncThunk(
+  "directions/delete",
+  async (directionId: string) => {
+    try {
+      const data = await fetch("/api/airtable/direction", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": "token-value",
+        },
+        body: JSON.stringify(directionId),
+      });
+
+      return (await data.json()) as IAirtableRecord<IDirectionFields>;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
 const directionsAdapter =
   createEntityAdapter<IAirtableRecord<IDirectionFields>>();
 
 const initialState: IDirectionState = {
   fetchState: "idle",
+  submitState: "idle",
 };
 
 export const directionsSlice = createSlice({
@@ -40,6 +106,53 @@ export const directionsSlice = createSlice({
 
       state.fetchState = "fulfilled";
     });
+    builder.addCase(fetchDirections.rejected, (state, action) => {
+      state.fetchState = "rejected";
+    });
+
+    builder.addCase(addDirection.pending, (state, action) => {
+      state.submitState = "pending";
+    });
+    builder.addCase(addDirection.fulfilled, (state, action) => {
+      if (action.payload) {
+        console.log(action.payload);
+
+        directionsAdapter.addMany(state, action.payload);
+      }
+
+      state.submitState = "fulfilled";
+    });
+    builder.addCase(addDirection.rejected, (state, action) => {
+      state.submitState = "rejected";
+    });
+
+    builder.addCase(updateDirection.pending, (state, action) => {
+      state.submitState = "pending";
+    });
+    builder.addCase(updateDirection.fulfilled, (state, action) => {
+      if (action.payload) {
+        directionsAdapter.upsertMany(state, action.payload);
+      }
+
+      state.submitState = "fulfilled";
+    });
+    builder.addCase(updateDirection.rejected, (state, action) => {
+      state.submitState = "rejected";
+    });
+
+    builder.addCase(deleteDirection.pending, (state, action) => {
+      state.submitState = "pending";
+    });
+    builder.addCase(deleteDirection.fulfilled, (state, action) => {
+      if (action.payload?.id) {
+        directionsAdapter.removeOne(state, action.payload.id);
+      }
+
+      state.submitState = "fulfilled";
+    });
+    builder.addCase(deleteDirection.rejected, (state, action) => {
+      state.submitState = "rejected";
+    });
   },
 });
 
@@ -50,5 +163,12 @@ export const selectFetchState = (state: AppState) =>
   state.directions.fetchState;
 export const selectAllDirections = directionSelectors.selectAll;
 export const selectDirectionById = directionSelectors.selectById;
+export const selectSubmitState = (state: AppState) =>
+  state.directions.submitState;
+
+export const selectByRecipeId = (state: AppState, recipeId: string) =>
+  selectAllDirections(state).filter((direction) =>
+    direction.fields.Recipes.some((id) => id === recipeId)
+  );
 
 export default directionsSlice.reducer;
