@@ -1,5 +1,5 @@
 import Directions from "@/components/Direction/Directions";
-import Ingredients from "@/components/Ingredients";
+import Ingredients from "@/components/Ingredients/Ingredients";
 import {
   fetchIngredients,
   selectByRecipeId as selectIngredientsByRecipeId,

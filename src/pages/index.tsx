@@ -1,4 +1,4 @@
-import Recipes from "@/components/Recipes";
+import Recipes from "@/components/Recipe/Recipes";
 import Base from "@/components/Base";
 
 const Home = () => {
