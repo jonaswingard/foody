@@ -40,28 +40,44 @@ const UpdateDirectionForm: FC<{
         defaultValue={direction.fields.Direction}
       />
       <div className="flex-shrink-0">
-        <Button disabled={submitState === "pending"}>Spara</Button>
+        <label>
+          <div className="text-center pt-2">SortOrder</div>
+          <input
+            className="text-center w-28 py-1 shadow-md"
+            name="SortOrder"
+            defaultValue={direction.fields.SortOrder}
+          />
+        </label>
+
         <Button
+          className="block w-full mt-5"
+          disabled={submitState === "pending"}
+          variant="primary"
+        >
+          Spara
+        </Button>
+        <Button
+          className="block w-full"
           disabled={submitState === "pending"}
           onClick={() => dispatch(deleteDirection(direction.id))}
           type="button"
         >
           Ta bort
         </Button>
-        <Button type="button" disabled={submitState === "pending"}>
+        <Button
+          className="block w-full"
+          type="button"
+          disabled={submitState === "pending"}
+        >
           Flytta upp
         </Button>
-        <Button type="button" disabled={submitState === "pending"}>
+        <Button
+          className="block w-full"
+          type="button"
+          disabled={submitState === "pending"}
+        >
           Flytta ned
         </Button>
-        <label>
-          <div className="text-center pt-2">SortOrder</div>
-          <input
-            className="text-center w-28 py-1"
-            name="SortOrder"
-            defaultValue={direction.fields.SortOrder}
-          />
-        </label>
       </div>
     </form>
   );

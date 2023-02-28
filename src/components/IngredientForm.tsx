@@ -25,7 +25,6 @@ const EditRecipe: FC<{ onCancel?: () => void; isAdding?: boolean }> = ({
 
   useEffect(() => {
     if (isAdding && submitState === "fulfilled") {
-      console.log("should clear now");
       if (nameRef.current && quantityRef.current) {
         quantityRef.current.value = "";
         nameRef.current.value = "";

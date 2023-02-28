@@ -1,16 +1,25 @@
+import { FC, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
 import { IDirectionFields } from "@/interfaces";
 import { addDirection, selectSubmitState } from "@/store/directionsSlice";
 import { AppDispatch } from "@/store/store";
 import { getFormData } from "@/utils";
-import { useRouter } from "next/router";
-import React, { FC } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Button } from "./Button";
 
 const AddDirectionForm: FC<{ onAdding: () => void }> = ({ onAdding }) => {
   const router = useRouter();
   const recipeId = router.query.id;
   const dispatch = useDispatch<AppDispatch>();
   const submitState = useSelector(selectSubmitState);
+  const directionRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    if (submitState === "fulfilled" && directionRef.current) {
+      directionRef.current.value = "";
+      directionRef.current.focus();
+    }
+  }, [submitState]);
 
   return (
     <form
@@ -31,21 +40,16 @@ const AddDirectionForm: FC<{ onAdding: () => void }> = ({ onAdding }) => {
         className="w-full p-3 rounded-lg shadow-md bg-white"
         name="Direction"
         placeholder="Add a direction"
+        ref={directionRef}
       />
       <div>
-        <button
-          className="bg-slate-400 border rounded py-2 px-3 mr-2 disabled:opacity-25"
-          disabled={submitState === "pending"}
-        >
+        <Button disabled={submitState === "pending"} variant="primary">
           {submitState === "pending" ? "Lägger till..." : "Lägg till"}
-        </button>
-        <button
-          className="border rounded py-2 px-3 disabled:opacity-25"
-          disabled={submitState === "pending"}
-          onClick={onAdding}
-        >
+        </Button>
+
+        <Button disabled={submitState === "pending"} onClick={onAdding}>
           Avbryt
-        </button>
+        </Button>
       </div>
     </form>
   );
