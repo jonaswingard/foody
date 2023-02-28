@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { IAirtableRecord, IDirectionFields } from "@/interfaces";
 import {
   deleteDirection,
@@ -8,6 +8,7 @@ import {
 import { AppDispatch } from "@/store/store";
 import { getFormData } from "@/utils";
 import { useDispatch, useSelector } from "react-redux";
+import { Button } from "./Button";
 
 const UpdateDirectionForm: FC<{
   direction: IAirtableRecord<IDirectionFields>;
@@ -39,36 +40,20 @@ const UpdateDirectionForm: FC<{
         defaultValue={direction.fields.Direction}
       />
       <div className="flex-shrink-0">
-        <button
-          className="bg-white border rounded py-2 px-3 block w-full disabled:opacity-25"
+        <Button disabled={submitState === "pending"}>Spara</Button>
+        <Button
           disabled={submitState === "pending"}
-        >
-          Spara
-        </button>
-        <button
+          onClick={() => dispatch(deleteDirection(direction.id))}
           type="button"
-          className="bg-white border rounded py-2 px-3 block w-full disabled:opacity-25"
-          disabled={submitState === "pending"}
-          onClick={() => {
-            dispatch(deleteDirection(direction.id));
-          }}
         >
           Ta bort
-        </button>
-        <button
-          type="button"
-          disabled={submitState === "pending"}
-          className="bg-white border rounded py-2 px-3 block w-full disabled:opacity-25"
-        >
+        </Button>
+        <Button type="button" disabled={submitState === "pending"}>
           Flytta upp
-        </button>
-        <button
-          type="button"
-          disabled={submitState === "pending"}
-          className="bg-white border rounded py-2 px-3 block w-full disabled:opacity-25"
-        >
+        </Button>
+        <Button type="button" disabled={submitState === "pending"}>
           Flytta ned
-        </button>
+        </Button>
         <label>
           <div className="text-center pt-2">SortOrder</div>
           <input

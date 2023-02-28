@@ -1,16 +1,5 @@
-import {
-  addDirection,
-  deleteDirection,
-  selectAllDirections,
-  selectSubmitState,
-  updateDirection,
-} from "@/store/directionsSlice";
-import { AppDispatch } from "@/store/store";
-import { getFormData } from "@/utils";
-import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IAirtableRecord, IDirectionFields, IIngredient } from "../interfaces";
+import { IAirtableRecord, IDirectionFields } from "../interfaces";
 import AddDirectionForm from "./Direction/AddDirectionForm";
 import Direction from "./Direction/Direction";
 import UpdateDirectionForm from "./Direction/UpdateDirectionForm";
@@ -19,7 +8,6 @@ const Directions: FC<{
   directions: IAirtableRecord<IDirectionFields>[];
   isEditing: boolean;
 }> = ({ directions, isEditing }) => {
-  const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ left: 0, top: 0 });
   const [isAdding, setIsAdding] = useState(false);
