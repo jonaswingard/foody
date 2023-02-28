@@ -11,7 +11,7 @@ import Direction from "./Direction";
 import UpdateDirectionForm from "./UpdateDirectionForm";
 
 const Directions: FC<{
-  isEditing: boolean;
+  isEditing?: boolean;
   recipeId?: string | string[];
 }> = ({ isEditing, recipeId }) => {
   const dispatch = useDispatch<AppDispatch>();

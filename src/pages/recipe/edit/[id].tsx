@@ -1,5 +1,5 @@
 import Base from "@/components/Base";
-import RecipeForm from "@/components/RecipeForm";
+import RecipeForm from "@/components/Recipe/RecipeForm";
 
 const Recipe = () => (
   <Base>

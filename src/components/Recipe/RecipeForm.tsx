@@ -18,7 +18,7 @@ import {
   selectFetchState as selectDirectionFetchState,
   selectByRecipeId as selectDirectionsByRecipeId,
 } from "@/store/directionsSlice";
-import Directions from "./Direction/Directions";
+import Directions from "../Direction/Directions";
 
 const RecipeForm: FC = () => {
   const router = useRouter();

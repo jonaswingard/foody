@@ -1,8 +1,8 @@
+import { FC } from "react";
 import { IAirtableRecord, IDirectionFields } from "@/interfaces";
-import React, { FC } from "react";
 
 const Direction: FC<{
-  isEditing: boolean;
+  isEditing?: boolean;
   direction: IAirtableRecord<IDirectionFields>;
 }> = ({ isEditing, direction }) => (
   <div className="rounded-lg shadow-md bg-white p-3">
