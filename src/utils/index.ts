@@ -1,4 +1,9 @@
-import { IIngredient, IIngredientMapping } from "../interfaces";
+import {
+  IAirtableRecord,
+  IDirectionFields,
+  IIngredient,
+  IIngredientMapping,
+} from "../interfaces";
 
 export const addIngredientsToDirection = (
   direction: string,

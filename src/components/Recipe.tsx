@@ -1,10 +1,5 @@
-import Directions from "@/components/Directions";
+import Directions from "@/components/Direction/Directions";
 import Ingredients from "@/components/Ingredients";
-import {
-  fetchDirections,
-  selectFetchState as selectDirectionFetchState,
-  selectByRecipeId as selectDirectionsByRecipeId,
-} from "@/store/directionsSlice";
 import {
   fetchIngredients,
   selectByRecipeId as selectIngredientsByRecipeId,
@@ -31,15 +26,10 @@ const Recipe = () => {
   const recipeFetchState = useSelector(selectRecipeFetchState);
   const recipeSubmitState = useSelector(selectSubmitState);
   const ingredientsFetchState = useSelector(selectIngredientFetchState);
-  const directionsFetchState = useSelector(selectDirectionFetchState);
   const [isEditing, setIsEditing] = useState(false);
   const recipeId = router.query.id;
   const ingredients = useSelector((state) =>
     selectIngredientsByRecipeId(state as AppState, recipeId as string)
-  );
-
-  const directions = useSelector((state) =>
-    selectDirectionsByRecipeId(state as AppState, recipeId as string)
   );
 
   useEffect(() => {
@@ -53,12 +43,6 @@ const Recipe = () => {
       dispatch(fetchIngredients());
     }
   }, [dispatch, ingredientsFetchState]);
-
-  useEffect(() => {
-    if (directionsFetchState === "idle") {
-      dispatch(fetchDirections());
-    }
-  }, [dispatch, directionsFetchState]);
 
   useEffect(() => {
     if (recipeSubmitState === "fulfilled") {
@@ -75,13 +59,7 @@ const Recipe = () => {
     return null;
   }
 
-  const {
-    Name,
-    Difficulty,
-    Servings,
-    Directions: directionIds,
-    TotalTime,
-  } = recipe.fields;
+  const { Name, Difficulty, Servings, TotalTime } = recipe.fields;
 
   return (
     <>
@@ -126,22 +104,7 @@ const Recipe = () => {
         </aside>
         <section className="w-full">
           <h3>Beskrivning</h3>
-          {directionIds && (
-            <Directions
-              directions={directions}
-              // directions={directions.map(
-              //   (direction, index) =>
-              //     addIngredientsToDirection(
-              //       direction,
-              //       index,
-              //       mappings?.mappings,
-              //       ingredients
-              //     ) || direction
-              // )}
-              // ingredients={ingredients}
-              isEditing={isEditing}
-            />
-          )}
+          <Directions isEditing={isEditing} recipeId={recipeId} />
         </section>
       </section>
     </>

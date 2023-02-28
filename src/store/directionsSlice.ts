@@ -167,8 +167,18 @@ export const selectSubmitState = (state: AppState) =>
   state.directions.submitState;
 
 export const selectByRecipeId = (state: AppState, recipeId: string) =>
-  selectAllDirections(state).filter((direction) =>
-    direction.fields.Recipes.some((id) => id === recipeId)
-  );
+  selectAllDirections(state)
+    .filter((direction) =>
+      direction.fields.Recipes.some((id) => id === recipeId)
+    )
+    .sort((a, b) => {
+      if (a.fields.SortOrder > b.fields.SortOrder) {
+        return 1;
+      } else if (a.fields.SortOrder < b.fields.SortOrder) {
+        return -1;
+      }
+
+      return 0;
+    });
 
 export default directionsSlice.reducer;

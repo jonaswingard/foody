@@ -13,12 +13,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "@/store/store";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import {
+  fetchDirections,
+  selectFetchState as selectDirectionFetchState,
+  selectByRecipeId as selectDirectionsByRecipeId,
+} from "@/store/directionsSlice";
 
 const RecipeForm: FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const submitState = useSelector(selectSubmitState);
   const recipeFetchState = useSelector(selectRecipeFetchState);
+  const directions = useSelector((state) =>
+    selectDirectionsByRecipeId(state as AppState, recipeId as string)
+  );
 
   useEffect(() => {
     if (recipeFetchState === "idle") {
