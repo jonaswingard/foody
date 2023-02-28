@@ -19,7 +19,6 @@ const Directions: FC<{
   const directions = useSelector((state) =>
     selectByRecipeId(state as AppState, recipeId as string)
   );
-  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     if (directionsFetchState === "idle") {
@@ -32,7 +31,7 @@ const Directions: FC<{
       <ol>
         {directions.map((direction, index) => (
           <li className="mb-4" key={index}>
-            {isAdding ? (
+            {isEditing ? (
               <UpdateDirectionForm direction={direction} />
             ) : (
               <Direction direction={direction} isEditing={isEditing} />
@@ -41,18 +40,7 @@ const Directions: FC<{
         ))}
       </ol>
 
-      {isAdding ? (
-        <AddDirectionForm onAdding={() => setIsAdding(false)} />
-      ) : (
-        <div className="text-right mt-2">
-          <button
-            className="shadow-md bg-white rounded-full w-12 h-12"
-            onClick={() => setIsAdding(true)}
-          >
-            🛠️
-          </button>
-        </div>
-      )}
+      {isEditing && <AddDirectionForm />}
     </div>
   );
 };

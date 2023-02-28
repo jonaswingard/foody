@@ -7,7 +7,7 @@ import { AppDispatch } from "@/store/store";
 import { getFormData } from "@/utils";
 import { Button } from "./Button";
 
-const AddDirectionForm: FC<{ onAdding: () => void }> = ({ onAdding }) => {
+const AddDirectionForm: FC = () => {
   const router = useRouter();
   const recipeId = router.query.id;
   const dispatch = useDispatch<AppDispatch>();
@@ -45,10 +45,6 @@ const AddDirectionForm: FC<{ onAdding: () => void }> = ({ onAdding }) => {
       <div>
         <Button disabled={submitState === "pending"} variant="primary">
           {submitState === "pending" ? "Lägger till..." : "Lägg till"}
-        </Button>
-
-        <Button disabled={submitState === "pending"} onClick={onAdding}>
-          Avbryt
         </Button>
       </div>
     </form>
