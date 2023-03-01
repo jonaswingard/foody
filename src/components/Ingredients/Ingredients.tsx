@@ -1,22 +1,25 @@
 import { IAirtableRecord, IIngredientFields } from "@/interfaces";
 import {
   resetSubmitState,
+  selectByRecipeId,
   selectSelectedIngredient,
   selectSubmitState,
   setSelectedIngredientId,
 } from "@/store/ingredientSlice";
+import { AppState } from "@/store/store";
 import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditRecipe from "./IngredientForm";
 
-const Ingredients: FC<{
-  ingredients: IAirtableRecord<IIngredientFields>[];
-}> = ({ ingredients }) => {
+const Ingredients: FC<{ recipeId?: string | string[] }> = ({ recipeId }) => {
   const dispatch = useDispatch();
   const selectedIngredient = useSelector(selectSelectedIngredient);
   const [isEdit, setIsEdit] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
   const submitState = useSelector(selectSubmitState);
+  const ingredients = useSelector((state) =>
+    selectByRecipeId(state as AppState, recipeId as string)
+  );
 
   useEffect(() => {
     if (!selectedIngredient) {

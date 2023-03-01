@@ -26,9 +26,6 @@ const Recipe = () => {
   const recipeSubmitState = useSelector(selectSubmitState);
   const ingredientsFetchState = useSelector(selectIngredientFetchState);
   const recipeId = router.query.id;
-  const ingredients = useSelector((state) =>
-    selectIngredientsByRecipeId(state as AppState, recipeId as string)
-  );
 
   useEffect(() => {
     if (recipeFetchState === "idle") {
@@ -63,7 +60,7 @@ const Recipe = () => {
       <section className="flex gap-5 flex-wrap md:flex-nowrap">
         <aside>
           <h3>Ingredienser</h3>
-          <Ingredients ingredients={ingredients} />
+          <Ingredients recipeId={recipeId} />
         </aside>
         <section className="w-full">
           <h3>Beskrivning</h3>

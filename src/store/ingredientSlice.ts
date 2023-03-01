@@ -176,9 +176,21 @@ export const { setSelectedIngredientId, resetSubmitState } =
   ingredientsSlice.actions;
 
 export const selectByRecipeId = (state: AppState, recipeId: string) =>
-  selectAllIngredients(state).filter((ingredient) =>
-    ingredient.fields.Recipes.some((id) => id === recipeId)
-  );
+  selectAllIngredients(state)
+    .filter((ingredient) =>
+      ingredient.fields.Recipes.some((id) => id === recipeId)
+    )
+    .sort((a, b) => {
+      if (a.fields.Name > b.fields.Name) {
+        return 1;
+      }
+
+      if (a?.fields.Name < b?.fields.Name) {
+        return -1;
+      }
+
+      return 0;
+    });
 
 export const selectSelectedIngredient = (state: AppState) => {
   if (state.ingredients.selectedId) {
