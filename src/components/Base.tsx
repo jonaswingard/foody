@@ -16,7 +16,7 @@ const Base = ({ children }: { children: ReactNode }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className="max-w-3xl mx-auto p-5 md:p-0 ">
+      <main className="max-w-3xl mx-auto p-5">
         {loading && <div>Loading...</div>}
         {session ? (
           <>{children}</>

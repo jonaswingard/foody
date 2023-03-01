@@ -19,6 +19,7 @@ import {
   selectByRecipeId as selectDirectionsByRecipeId,
 } from "@/store/directionsSlice";
 import Directions from "../Direction/Directions";
+import EditIngredients from "../Ingredients/EditIngredients";
 
 const RecipeForm: FC = () => {
   const router = useRouter();
@@ -47,7 +48,7 @@ const RecipeForm: FC = () => {
 
   return (
     <>
-      <div className="w-full max-w-l bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="w-full max-w-l bg-white shadow-md rounded px-8 pt-6 pb-12 mb-6">
         <div className="max-w-xs">
           <form
             id="recipe-form"
@@ -159,15 +160,13 @@ const RecipeForm: FC = () => {
           </form>
         </div>
       </div>
-      <section className="flex gap-5 flex-wrap md:flex-nowrap">
-        <aside>
-          <h3>Ingredienser</h3>
-          {/* <Ingredients ingredients={ingredients} /> */}
-        </aside>
-        <section className="w-full">
-          <h3>Beskrivning</h3>
-          <Directions isEditing recipeId={recipeId} />
-        </section>
+      <section className="w-full mb-6">
+        <h3 className="text-xl mb-2">Ingredienser</h3>
+        <EditIngredients recipeId={recipeId} />
+      </section>
+      <section className="w-full mb-4">
+        <h3 className="text-xl mb-2">Beskrivning</h3>
+        <Directions isEditing recipeId={recipeId} />
       </section>
     </>
   );

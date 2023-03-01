@@ -1,10 +1,6 @@
 import Directions from "@/components/Direction/Directions";
 import Ingredients from "@/components/Ingredients/Ingredients";
-import {
-  fetchIngredients,
-  selectByRecipeId as selectIngredientsByRecipeId,
-  selectFetchState as selectIngredientFetchState,
-} from "@/store/ingredientSlice";
+
 import {
   fetchRecipes,
   recipeSelectors,
@@ -24,7 +20,6 @@ const Recipe = () => {
   const dispatch = useDispatch<AppDispatch>();
   const recipeFetchState = useSelector(selectRecipeFetchState);
   const recipeSubmitState = useSelector(selectSubmitState);
-  const ingredientsFetchState = useSelector(selectIngredientFetchState);
   const recipeId = router.query.id;
 
   useEffect(() => {
@@ -32,12 +27,6 @@ const Recipe = () => {
       dispatch(fetchRecipes());
     }
   }, [dispatch, recipeFetchState]);
-
-  useEffect(() => {
-    if (ingredientsFetchState === "idle") {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch, ingredientsFetchState]);
 
   useEffect(() => {
     if (recipeSubmitState === "fulfilled") {

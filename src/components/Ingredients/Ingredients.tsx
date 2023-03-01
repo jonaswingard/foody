@@ -1,25 +1,34 @@
-import { IAirtableRecord, IIngredientFields } from "@/interfaces";
 import {
   resetSubmitState,
   selectByRecipeId,
   selectSelectedIngredient,
   selectSubmitState,
   setSelectedIngredientId,
+  fetchIngredients,
+  selectFetchState,
 } from "@/store/ingredientSlice";
-import { AppState } from "@/store/store";
+import { AppDispatch, AppState } from "@/store/store";
 import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditRecipe from "./IngredientForm";
 
 const Ingredients: FC<{ recipeId?: string | string[] }> = ({ recipeId }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const selectedIngredient = useSelector(selectSelectedIngredient);
   const [isEdit, setIsEdit] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
   const submitState = useSelector(selectSubmitState);
+  const fetchState = useSelector(selectFetchState);
+
   const ingredients = useSelector((state) =>
     selectByRecipeId(state as AppState, recipeId as string)
   );
+
+  useEffect(() => {
+    if (fetchState === "idle") {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, fetchState]);
 
   useEffect(() => {
     if (!selectedIngredient) {
@@ -38,48 +47,34 @@ const Ingredients: FC<{ recipeId?: string | string[] }> = ({ recipeId }) => {
     <div className="p-3 rounded-lg shadow-md bg-white">
       <table className="w-64">
         <tbody>
-          {ingredients
-            .sort((a, b) => {
-              if (a.fields.Name > b.fields.Name) {
-                return 1;
-              }
+          {ingredients.map((ingredient) => {
+            const shouldShowEdit =
+              isEdit && ingredient.id === selectedIngredient?.id;
 
-              if (a?.fields.Name < b?.fields.Name) {
-                return -1;
-              }
-
-              return 0;
-            })
-            .map((ingredient) => {
-              const shouldShowEdit =
-                isEdit && ingredient.id === selectedIngredient?.id;
-
-              return (
-                <tr key={ingredient.id}>
-                  {shouldShowEdit ? (
-                    <td colSpan={2}>
-                      <EditRecipe />
+            return (
+              <tr key={ingredient.id}>
+                {shouldShowEdit ? (
+                  <td colSpan={2}>
+                    <EditRecipe />
+                  </td>
+                ) : (
+                  <>
+                    <td>
+                      <button
+                        onClick={() => {
+                          setIsEdit(true);
+                          dispatch(setSelectedIngredientId(ingredient.id));
+                        }}
+                      >
+                        {ingredient?.fields.Name}
+                      </button>
                     </td>
-                  ) : (
-                    <>
-                      <td>
-                        <button
-                          onClick={() => {
-                            console.log("clicked", ingredient.id);
-
-                            setIsEdit(true);
-                            dispatch(setSelectedIngredientId(ingredient.id));
-                          }}
-                        >
-                          {ingredient?.fields.Name}
-                        </button>
-                      </td>
-                      <td>{ingredient?.fields.Quantity}</td>
-                    </>
-                  )}
-                </tr>
-              );
-            })}
+                    <td>{ingredient?.fields.Quantity}</td>
+                  </>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       {isAdd ? (

@@ -5,7 +5,8 @@ import { IDirectionFields } from "@/interfaces";
 import { addDirection, selectSubmitState } from "@/store/directionsSlice";
 import { AppDispatch } from "@/store/store";
 import { getFormData } from "@/utils";
-import { Button } from "./Button";
+import { Button } from "../Button";
+import TextArea from "../TextArea";
 
 const AddDirectionForm: FC = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const AddDirectionForm: FC = () => {
 
   return (
     <form
-      className="text-right mt-2"
+      className="flex gap-2 mb-4"
       onSubmit={(e) => {
         e.preventDefault();
 
@@ -36,14 +37,17 @@ const AddDirectionForm: FC = () => {
         );
       }}
     >
-      <textarea
-        className="w-full p-3 rounded-lg shadow-md bg-white"
+      <TextArea
         name="Direction"
         placeholder="Add a direction"
         ref={directionRef}
       />
-      <div>
-        <Button disabled={submitState === "pending"} variant="primary">
+      <div className="flex-shrink-0 w-2/12">
+        <Button
+          className="w-full"
+          disabled={submitState === "pending"}
+          variant="primary"
+        >
           {submitState === "pending" ? "Lägger till..." : "Lägg till"}
         </Button>
       </div>

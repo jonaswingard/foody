@@ -8,7 +8,9 @@ import {
 import { AppDispatch } from "@/store/store";
 import { getFormData } from "@/utils";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "./Button";
+import { Button } from "../Button";
+import TextArea from "../TextArea";
+import { Input } from "../Input";
 
 const UpdateDirectionForm: FC<{
   direction: IAirtableRecord<IDirectionFields>;
@@ -18,7 +20,7 @@ const UpdateDirectionForm: FC<{
 
   return (
     <form
-      className="flex gap-2"
+      className="flex gap-2 mb-4"
       onSubmit={(e) => {
         e.preventDefault();
         const postData = getFormData(e.currentTarget) as IDirectionFields;
@@ -34,16 +36,12 @@ const UpdateDirectionForm: FC<{
         );
       }}
     >
-      <textarea
-        className="w-full p-3 rounded-lg shadow-md bg-white"
-        name="Direction"
-        defaultValue={direction.fields.Direction}
-      />
-      <div className="flex-shrink-0">
-        <label>
-          <div className="text-center pt-2">SortOrder</div>
-          <input
-            className="text-center w-28 py-1 shadow-md"
+      <TextArea name="Direction" defaultValue={direction.fields.Direction} />
+      <div className="flex-shrink-0 w-2/12">
+        <label className="flex items-center gap-2">
+          <div className="text-center">SortOrder</div>
+          <Input
+            className="text-center py-1"
             name="SortOrder"
             defaultValue={direction.fields.SortOrder}
           />
