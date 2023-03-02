@@ -18,7 +18,7 @@ const AddIngredientForm: FC<{ recipeId?: string | string[] }> = ({
     if (submitState === "fulfilled" && nameRef.current && quantityRef.current) {
       quantityRef.current.value = "";
       nameRef.current.value = "";
-      nameRef.current.focus();
+      quantityRef.current.focus();
     }
   }, [submitState]);
 
@@ -39,17 +39,17 @@ const AddIngredientForm: FC<{ recipeId?: string | string[] }> = ({
       }}
     >
       <Input
+        name="Quantity"
+        placeholder="Mängd"
+        disabled={submitState === "pending"}
+        ref={quantityRef}
+      />
+      <Input
         name="Name"
         placeholder="Namn"
         autoFocus
         ref={nameRef}
         disabled={submitState === "pending"}
-      />
-      <Input
-        name="Quantity"
-        placeholder="Mängd"
-        disabled={submitState === "pending"}
-        ref={quantityRef}
       />
       <div className="flex-shrink-0 w-3/12">
         <Button disabled={submitState === "pending"} variant="primary">

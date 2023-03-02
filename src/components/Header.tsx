@@ -7,11 +7,11 @@ const Header: FC = () => {
   const { data: session } = useSession();
 
   return (
-    <header className="p-6 flex justify-between items-center text-white bg-slate-800">
+    <header className="p-6 flex gap-2 sm:gap-0 justify-center sm:justify-between items-center text-white bg-slate-800 flex-wrap sm:flex-nowrap ">
       <Link href="/">
         <h1 className="logo text-3xl">Foody v0.1 🍕🍔🌮</h1>
       </Link>
-      <nav className="flex items-center gap-2">
+      <nav className="flex items-center gap-2 w-full sm:w-auto justify-center">
         <Link className="block underline underline-offset-2" href="/">
           Visa alla
         </Link>

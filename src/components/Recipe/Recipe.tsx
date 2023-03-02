@@ -14,8 +14,8 @@ import {
 import { AppDispatch, AppState } from "@/store/store";
 
 const Recipe = () => {
-  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const recipeFetchState = useSelector(selectRecipeFetchState);
   const recipeSubmitState = useSelector(selectSubmitState);
   const recipeId = router.query.id;
@@ -44,12 +44,12 @@ const Recipe = () => {
   return (
     <>
       <RecipeHeader recipeId={recipeId} />
-      <section className="flex gap-5 flex-wrap md:flex-nowrap">
-        <aside>
+      <section className="flex gap-5 flex-wrap sm:flex-nowrap">
+        <aside className="w-full sm:w-4/12">
           <h3 className="text-xl mb-2">Ingredienser</h3>
           <Ingredients recipeId={recipeId} />
         </aside>
-        <section className="w-full">
+        <section className="flex-1">
           <h3 className="text-xl mb-2">Beskrivning</h3>
           <Directions recipeId={recipeId} />
         </section>

@@ -142,7 +142,7 @@ const EditRecipeForm: FC<{ recipeId?: string | string[] }> = ({ recipeId }) => {
           className="border rounded py-2 px-3 bg-white shadow-md border-slate-300"
           href={`/recipe/${recipeId}`}
         >
-          Avbryt
+          Till receptet
         </Link>
       </div>
     </form>

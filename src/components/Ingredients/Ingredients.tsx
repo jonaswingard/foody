@@ -34,12 +34,12 @@ const Ingredients: FC<{ recipeId?: string | string[] }> = ({ recipeId }) => {
 
   return ingredients?.length ? (
     <div className="p-3 rounded-lg shadow-md bg-white">
-      <table className="w-64">
+      <table className="w-full">
         <tbody>
           {ingredients.map((ingredient) => (
-            <tr key={ingredient.id}>
+            <tr className="border-b-2 border-b-slate-200" key={ingredient.id}>
+              <td className="py-1">{ingredient?.fields.Quantity}</td>
               <td>{ingredient?.fields.Name}</td>
-              <td>{ingredient?.fields.Quantity}</td>
             </tr>
           ))}
         </tbody>

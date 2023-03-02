@@ -22,7 +22,7 @@ const RecipeHeader: FC<{ recipeId?: string | string[] }> = ({ recipeId }) => {
         <h2 className="text-center flex-1 text-2xl">{Name}</h2>
         <Link href={`/recipe/edit/${recipe.id}`}>🛠️</Link>
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap sm:flex-nowrap">
         <span>
           Portioner: <span className="italic">{Servings}</span>
         </span>

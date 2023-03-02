@@ -38,16 +38,16 @@ const EditIngredientForm: FC<{
       }}
     >
       <Input
+        name="Quantity"
+        placeholder="Mängd"
+        defaultValue={ingredient?.fields.Quantity}
+        disabled={submitState === "pending"}
+      />
+      <Input
         name="Name"
         placeholder="Namn"
         autoFocus
         defaultValue={ingredient?.fields.Name}
-        disabled={submitState === "pending"}
-      />
-      <Input
-        name="Quantity"
-        placeholder="Mängd"
-        defaultValue={ingredient?.fields.Quantity}
         disabled={submitState === "pending"}
       />
       <div className="flex-shrink-0 w-3/12">
