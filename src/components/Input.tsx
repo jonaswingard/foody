@@ -1,11 +1,6 @@
-import React, {
-  ButtonHTMLAttributes,
-  FC,
-  forwardRef,
-  PropsWithChildren,
-} from "react";
+import React, { forwardRef, InputHTMLAttributes } from "react";
 
-interface IInput extends ButtonHTMLAttributes<HTMLInputElement> {}
+interface IInput extends InputHTMLAttributes<HTMLInputElement> {}
 
 export const Input = forwardRef<HTMLInputElement, IInput>(
   ({ className, children, ...props }, ref) => (
