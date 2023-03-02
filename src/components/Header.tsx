@@ -11,18 +11,36 @@ const Header: FC = () => {
       <Link href="/">
         <h1 className="logo text-3xl">Foody v0.1 🍕🍔🌮</h1>
       </Link>
+      <nav className="flex items-center gap-2">
+        <Link className="block underline underline-offset-2" href="/">
+          Visa alla
+        </Link>
+        <span>|</span>
+        <Link
+          className="block underline underline-offset-2"
+          href="/recipe/edit"
+        >
+          Skapa nytt
+        </Link>
+        <span>|</span>
+        <Link className="block underline underline-offset-2" href="/types">
+          Visa efter typ
+        </Link>
+      </nav>
       {session && (
-        <div className="flex items-center">
-          <div className="mr-1 rounded-full h-5 w-5 overflow-hidden">
-            <Image
-              width={20}
-              height={20}
-              src={session.user?.image ?? ""}
-              alt=""
-            />
+        <div className="flex items-center gap-2">
+          <div className="flex items-center">
+            <div className="mr-1 rounded-full h-5 w-5 overflow-hidden">
+              <Image
+                width={20}
+                height={20}
+                src={session.user?.image ?? ""}
+                alt=""
+              />
+            </div>
+            {session.user?.name ?? session.user?.email}
           </div>
-          {session.user?.name ?? session.user?.email}
-          <div className="px-3">{" | "}</div>
+          <div>{" | "}</div>
           <Link
             href="#"
             onClick={(e) => {
@@ -31,7 +49,7 @@ const Header: FC = () => {
             }}
             className="btn-signin"
           >
-            Sign out
+            Logga ut
           </Link>
         </div>
       )}
@@ -44,7 +62,7 @@ const Header: FC = () => {
           }}
           className="btn-signin"
         >
-          Sign in
+          Logga in
         </Link>
       )}
     </header>

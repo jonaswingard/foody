@@ -67,7 +67,7 @@ const EditIngredientForm: FC<{
               dispatch(deleteIngredient(ingredient?.id as string));
             }
           }}
-          variant="secondary"
+          variant="danger"
         >
           Ta bort
         </Button>

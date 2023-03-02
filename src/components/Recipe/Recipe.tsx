@@ -1,6 +1,9 @@
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import RecipeHeader from "./RecipeHeader";
 import Directions from "@/components/Direction/Directions";
 import Ingredients from "@/components/Ingredients/Ingredients";
-
 import {
   fetchRecipes,
   recipeSelectors,
@@ -9,11 +12,6 @@ import {
   selectSubmitState,
 } from "@/store/recipesSlice";
 import { AppDispatch, AppState } from "@/store/store";
-
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import RecipeHeader from "./RecipeHeader";
 
 const Recipe = () => {
   const router = useRouter();
@@ -48,11 +46,11 @@ const Recipe = () => {
       <RecipeHeader recipeId={recipeId} />
       <section className="flex gap-5 flex-wrap md:flex-nowrap">
         <aside>
-          <h3>Ingredienser</h3>
+          <h3 className="text-xl mb-2">Ingredienser</h3>
           <Ingredients recipeId={recipeId} />
         </aside>
         <section className="w-full">
-          <h3>Beskrivning</h3>
+          <h3 className="text-xl mb-2">Beskrivning</h3>
           <Directions recipeId={recipeId} />
         </section>
       </section>

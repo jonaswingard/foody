@@ -8,7 +8,6 @@ import {
   IAirtableRecord,
   IBaseState,
   IRecipeFields,
-  IRecipeRecord,
   TAsyncState,
 } from "@/interfaces";
 import build from "next/dist/build";
@@ -50,7 +49,7 @@ export const addRecipe = createAsyncThunk(
 
 export const updateRecipe = createAsyncThunk(
   "recipes/updateRecipe",
-  async (recipe: IRecipeRecord) => {
+  async (recipe: IAirtableRecord<IRecipeFields>) => {
     try {
       const data = await fetch("/api/airtable/recipe", {
         method: "PUT",
@@ -165,7 +164,17 @@ export const recipeSelectors = recipesAdapter.getSelectors<AppState>(
 );
 export const selectFetchState = (state: AppState) => state.recipes.fetchState;
 export const selectSubmitState = (state: AppState) => state.recipes.submitState;
-export const allRecipes = recipeSelectors.selectAll;
+export const selectAllRecipes = recipeSelectors.selectAll;
+export const sortedRecipes = (state: AppState) =>
+  selectAllRecipes(state).sort((a, b) => {
+    if (a.fields.Name > b.fields.Name) {
+      return 1;
+    } else if (a.fields.Name < b.fields.Name) {
+      return -1;
+    }
+    return 0;
+  });
+
 export const selectRecipeById = recipeSelectors.selectById;
 
 export const { resetSubmitState } = recipesSlice.actions;

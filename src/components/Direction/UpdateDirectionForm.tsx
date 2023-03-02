@@ -59,22 +59,9 @@ const UpdateDirectionForm: FC<{
           disabled={submitState === "pending"}
           onClick={() => dispatch(deleteDirection(direction.id))}
           type="button"
+          variant="danger"
         >
           Ta bort
-        </Button>
-        <Button
-          className="block w-full"
-          type="button"
-          disabled={submitState === "pending"}
-        >
-          Flytta upp
-        </Button>
-        <Button
-          className="block w-full"
-          type="button"
-          disabled={submitState === "pending"}
-        >
-          Flytta ned
         </Button>
       </div>
     </form>

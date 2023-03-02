@@ -26,11 +26,6 @@ export interface IBaseState {
   fetchState: TAsyncState;
 }
 
-export interface IRecipeRecord {
-  id: string;
-  fields: IRecipeFields;
-}
-
 export interface IAirtableRecord<T> {
   id: string;
   fields: T;
@@ -44,6 +39,7 @@ export interface IRecipeFields {
   Ingredients: string[];
   Directions: string[];
   TotalTime: string;
+  URL: string;
 }
 
 export interface IDirectionFields {
